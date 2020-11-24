@@ -49,16 +49,15 @@ self.addEventListener("fetch", function(evt) {
                         cache.put(evt.request.url, response.clone());
                     }
                     return response;
-                }).catch((err) => {
+                }).catch(err => {
                     return cache.match(evt.request);
                 });
-            }).catch((err) => console.log(err))
-        );
+            })        );
         return;
     }
     evt.respondWith(
-        caches.open(CACHE_NAME).then((cache) => {
-            return cache.match(evt.request).then((response) => {
+        caches.open(CACHE_NAME).then(cache => {
+            return cache.match(evt.request).then(response => {
                 return response || fetch(evt.request);
             });
         })
