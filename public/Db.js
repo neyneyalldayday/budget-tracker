@@ -1,9 +1,8 @@
-const { response } = require("express");
 
 let db;
 const request = indexedDB.open("budget, 1");
 
-request.onupgraded = function(event) {
+request.onupgradeneeded = function(event) {
     const db = event.target.result;
     db.createObjectsStore("pending", { autoIncrement: true });
 };
@@ -22,8 +21,15 @@ request.onerror = function(event) {
 function saveRecord(record) {
     const transaction = db.transaction(["pending"], "readwrite");
     const store = transaction.createObjectsStore("pending");
-    const getAll = store.getAll;
+    store.add(record);
 
+
+
+}
+ function checkDatabase() {
+     const transaction = db.transaction(["pending"], "readwrite");
+     const store = transaction.objectStore("pending");
+     const getAll = store.getAll();
     getAll.onsuccess = function() {
         if (getAll.result.length > 0) {
             fetch("/api/transaction/bulk", {

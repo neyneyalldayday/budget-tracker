@@ -3,7 +3,11 @@ const path = require("path");
 
 const config = {
     entry: {
-        index: "./public/index/dist",
+        index: "./public/index.js",
+        db: "./public/db.js"
+    },
+    output: {
+        path: __dirname + "/public/dist",
         filename: "[name].bundle.js"
     },
     mode: "development",
@@ -30,4 +34,4 @@ const config = {
     ]
 };
 
-module.exports = config;
+module.exports = config

@@ -1,33 +1,31 @@
 const FILES_TO_CACHE = [
     "/",
     "/index.html",
-    "/db.js",
     "/dist/index.bundle.js",
     "/dist/db.bundle.js",
     "/dist/manifest.json",
     "/icons/icon-512x512.png",
-    "style.css"
+    "style.css",
+    "/db.js"
 ];
 
 const DATA_CACHE_NAME = "data-cache-v1";
 const CACHE_NAME = "static-cache-v2";
 
 self.addEventListener("install", evt => {
-    evt.waitUntill(
-        caches.open(CACHE_NAME).then(chache => {
+    evt.waitUntil(
+        caches.open(CACHE_NAME).then(cache => {
             console.log("files pre-cached");
-            return caches.addAll(FILES_TO_CACHE).then((result) => {
-                console.log("result add all", result);
-            }).catch((err) => {
-                console.log("Error: ", err);
-            });
-        })
-    )
+            return caches.addAll(FILES_TO_CACHE);
+            })
+           );
+        
+    
     self.skipWaiting();
 });
 
 self.addEventListener("activate", evt => {
-    evt.waitUntill(
+    evt.waitUntil(
         caches.keys().then(keyList => {
             return Promise.all(
                 keyList.map(key => {
@@ -58,7 +56,7 @@ self.addEventListener("fetch", function(evt) {
         );
         return;
     }
-    evt,respondWith(
+    evt.respondWith(
         caches.open(CACHE_NAME).then((cache) => {
             return cache.match(evt.request).then((response) => {
                 return response || fetch(evt.request);
