@@ -10,7 +10,7 @@ const FILES_TO_CACHE = [
 ];
 
 const DATA_CACHE_NAME = "data-cache-v1";
-const CACHE_NAME = "static-cache-v1";
+const CACHE_NAME = "static-cache-v2";
 
 self.addEventListener("install", evt => {
     evt.waitUntill(
