@@ -1,18 +1,17 @@
-const FILES_TO_CACHE = [
-    "/",
-    "/index.html",
-    "/index.js",
-    "/dist/index.bundle.js",
-    "/dist/db.bundle.js",
-    "/dist/manifest.json",
-    "/icons/icon-512x512.png",
-    "/icons/icon-192x192.png",
-    "style.css",
-    "/Db.js"
-];
-
 const CACHE_NAME = "static-cache-v2";
 const DATA_CACHE_NAME = "data-cache-v1";
+
+const FILES_TO_CACHE = [
+    "/",
+    "index.html",
+    "index.js",
+    "service-worker.js",  
+    "manifest.webmanifest",   
+    "styles.css",
+    "Db.js"
+];
+
+
 
 
 self.addEventListener("install", evt => {
@@ -34,13 +33,13 @@ self.addEventListener("activate", evt => {
                 keyList.map(key => {
                     if (key !== CACHE_NAME && key !== DATA_CACHE_NAME) {
                         console.log("old cache data removed", key);
-                        return cache.delete(key);
+                        return caches.delete(key);
                     }
                 })
             );
         })
     );
-    self.ClientRectList.claim();
+    self.clients.claim();
 })
 
 self.addEventListener("fetch", function(evt) {
@@ -55,10 +54,10 @@ self.addEventListener("fetch", function(evt) {
                    }
                    return response;
                })
-               .catch(err => {
+               .catch((err) => {
                    return cache.match(evt.request);
                });
-           })
+           }).catch(err => console.log(err))
        );
        return;
    }
